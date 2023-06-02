@@ -1,0 +1,23 @@
+site_name: Voromesh
+site_description: "Meshing with Voronoi decomposition."
+
+theme:
+    name: "material"
+    palette:
+        primary: "blue"
+        accent: "grey"
+
+plugins:
+    - search
+    - mkdocstrings
+    - mkdocs-jupyter:
+        execute: true
+
+markdown_extensions:
+    - pymdownx.highlight
+    - pymdownx.superfences
+
+nav:
+    - "Start": index.md
+    - "Examples": helloworld.ipynb
+    - "API": api.md
