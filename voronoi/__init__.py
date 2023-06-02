@@ -6,8 +6,7 @@ Created on Thu Apr 21 10:49:20 2022
 """
 
 import matplotlib.pyplot as plt
-from .helper import convex_hull, voronoi_bound, neighbors, distance
-from .helper import innerinterfaces, matchinterface, volumes
+from .helper import convex_hull, voronoi_bound
 from .io import to_vtk, to_pyvista
 from numpy import array
 from scipy.spatial import Delaunay
@@ -37,15 +36,6 @@ class Voronoi:
         boundary = convex_hull(points, buffer_size)
 
         self.voronoi, self.points = voronoi_bound(points, boundary)
-
-    def find_neighbors(self):
-        self.volume = volumes(self.voronoi)
-        ne = neighbors(self.points)
-
-        self.interface, self.neighbor = matchinterface(self.voronoi, ne)
-
-        self.distance, self.nvec = distance(self.points, self.neighbor)
-        self.inner = innerinterfaces(self.neighbor, self.voronoi)
 
     def plot(self, center=False, tri=False):
         """

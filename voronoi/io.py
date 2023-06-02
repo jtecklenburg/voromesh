@@ -34,9 +34,11 @@ def create_unstructured_mesh(points, connectivities):
 
     return mesh
 
+
 def add_dimension(points):
     z = np.zeros((np.shape(points)[0], 1))
     return np.hstack((points, z))
+
 
 def to_vtk(voronoi, decimalplace=8):
 
@@ -68,6 +70,7 @@ def to_vtk(voronoi, decimalplace=8):
         i = i + n
 
     return create_unstructured_mesh(points, connectivities)
+
 
 def to_pyvista(voronoi, decimalplace=8):
     vtkmesh = to_vtk(voronoi, decimalplace)
