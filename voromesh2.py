@@ -14,7 +14,7 @@ import vtk
 from voronoi import Voronoi
 
 
-testcase = 1
+testcase = 0
 plotvoro = False
 plotmesh = False
 fromfile = True
@@ -33,28 +33,29 @@ def update_z_from_surf(mesh, surf):
     mesh.points[:, 2] = mesh["z"]
     return mesh
 
-def layersfromsurf(thickness, coords_unique, ind, n_cells, area=False):
 
-    if type(area) is not bool:
-        print("Berechne Volumen...")
-        calc_volume = True
-    else:
-        calc_volume = False
+def layersfromsurf(surfmesh, thickness):
+    """
+    Use a topographic surface to create a 3D terrain-following mesh.
 
-    layer = list()
+    Parameters
+    ----------
+    surfmesh : Pyvista.UnstructuredGrid with 2D-Elements
+        Surface mesh.
+    thickness : List of float
+        thickness of layers in z-direction.
 
-    nlayer = np.size(thickness)
-    coords = np.tile(coords_unique, (nlayer+1, 1))
-    nc = np.shape(coords_unique)[0]
+    Returns
+    -------
+    mesh : Pyvista.UnstructuredGrid with 3D-Elements
+        Extruded surface mesh.
 
-    # Für jede Schicht werden z-Koordinaten festgelegt.
-    for ilayer in range(nlayer):
-        coords[((ilayer+1)*nc):(ilayer+2)*nc, 2] = coords[ilayer*nc:((ilayer+1)*nc), 2]+thickness[ilayer]
+    """
 
-    # Eingabedaten für pv.UnstructuredGrid ind_list2, cell_type
-
-    cell_type = list()
-    ind_list2 = np.array([], dtype=np.int64)
+    surfmesh = surfmesh.compute_cell_sizes(length=False,
+                                           area=True,
+                                           volume=False)
+    area = surfmesh["Area"]
     volume = list()
 
     # Typ des Geometry bzws. des Prismas
@@ -64,48 +65,43 @@ def layersfromsurf(thickness, coords_unique, ind, n_cells, area=False):
              6: vtk.VTK_HEXAGONAL_PRISM,
              7: vtk.VTK_CONVEX_POINT_SET}
 
-    for ilayer in range(nlayer):
-        print("l = " + str(ilayer))
+    nlayer = np.size(thickness)
+    points = np.tile(surfmesh.points, (nlayer+1, 1))
+    nc = surfmesh.number_of_points
 
-        i = 0
-        index = 0
-        ind_list = list()
+    # Für jede Schicht werden z-Koordinaten festgelegt.
+    for i in range(nlayer):
+        points[((i+1)*nc):(i+2)*nc, 2] = (points[i*nc:((i+1)*nc), 2]
+                                          + thickness[i])
 
-        for n in n_cells:
+    cells = list()
+    celltypes = list()
+    layer = list()
 
-            layer.append(ilayer)
+    ind = 0
+    for i in range(surfmesh.number_of_cells):
+        npoints = surfmesh.cells[ind]
+        edges = surfmesh.cells[ind+1:ind+1+npoints]
 
-            # Typ der Geometrie
-            cell_type.append(ctype.setdefault(n-1, vtk.VTK_CONVEX_POINT_SET))
-            # Bei Shapely-Polygonen ist der erste und letzte Punkt gleich
-            # Bei VTK-Geometrien muss man die Nummerierung der Eckpunkte
-            # beachten!
+        ind = ind + 1 + npoints
 
-            # Anzahl der einzulesenden Eckpunkte
-            ind_list.append(2*(n-1))
+        for j in range(nlayer):
+            celltypes.append(ctype.setdefault(npoints,
+                                              vtk.VTK_CONVEX_POINT_SET))
 
-            # Polygone der unteren und der oberen Fläche des Prismas
-            cell_index = (list(ind[i:(i+n-1)]+ilayer*nc)
-                          + list(ind[i:(i+n-1)]+(ilayer+1)*nc))
+            cells.append(2*npoints)         # number of points
+            cells.extend(edges+j*nc)        # lower side
+            cells.extend(edges+(j+1)*nc)    # upper side
 
-            if calc_volume:
-                volume.append(area[index]*thickness[ilayer])
+            volume.append(area[i]*thickness[j])
+            layer.append(j)
 
-            index = index + 1
-            ind_list = ind_list + cell_index
-            i = i + n
+    mesh = pv.UnstructuredGrid(cells,
+                               np.array(celltypes),
+                               points)
 
-        ind_list2 = np.hstack((ind_list2, np.array(ind_list)))
-
-    print("Erzeuge Gitter...")
-    mesh = pv.UnstructuredGrid(ind_list2,
-                               np.array(cell_type),
-                               coords)
-
-    if calc_volume:
-        mesh["vol"] = volume
-
-    mesh["layer"] = layer
+    mesh["Volume"] = volume
+    mesh["Layer"] = layer
 
     return mesh
 
@@ -296,54 +292,15 @@ surfmesh = surfmesh.compute_cell_sizes(length=False, area=True, volume=False)
 if plotmesh:
     print(surfmesh.array_names)
     surfmesh.plot(show_edges=True, scalars="z")
-    surfmesh.plot(show_edges=True, scalars="Area")
 
 
 area = surfmesh["Area"]
 
-#mesh = layersfromsurf(thickness, coords_unique, ind, n_cells, area)
+mesh = layersfromsurf(surfmesh, thickness)
 
-
-# Typ des Geometry bzws. des Prismas
-ctype = {3: vtk.VTK_WEDGE,
-         4: vtk.VTK_HEXAHEDRON,
-         5: vtk.VTK_PENTAGONAL_PRISM,
-         6: vtk.VTK_HEXAGONAL_PRISM,
-         7: vtk.VTK_CONVEX_POINT_SET}
-
-nlayer = np.size(thickness)
-points = np.tile(surfmesh.points, (nlayer+1, 1))
-nc = surfmesh.number_of_points
-
-# Für jede Schicht werden z-Koordinaten festgelegt.
-for ilayer in range(nlayer):
-    points[((ilayer+1)*nc):(ilayer+2)*nc, 2] = points[ilayer*nc:((ilayer+1)*nc), 2]+thickness[ilayer]
-
-
-cells = list()
-celltypes = list()
-
-ind = 0
-for i in range(surfmesh.number_of_cells):
-#for i in range(10):
-    npoints = surfmesh.cells[ind]
-    edges = surfmesh.cells[ind+1:ind+1+npoints]
-
-    #print(edges)
-    ind = ind + 1 + npoints
-
-    for j in range(nlayer):
-        celltypes.append(ctype.setdefault(npoints, vtk.VTK_CONVEX_POINT_SET))
-
-        cells.append(2*npoints)         # number of points
-        cells.extend(edges+j*nc)        # lower side
-        cells.extend(edges+(j+1)*nc)    # upper side
-
-mesh = pv.UnstructuredGrid(cells,
-                           np.array(celltypes),
-                           points)
 print("Berechne Interfaces zwischen den Zellen...")
 #dist, areai, areao, betax = calc_conne(mesh)
 
 mesh["z"] = mesh.points[:, 2]
+
 mesh.plot(show_edges=True)
