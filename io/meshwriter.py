@@ -8,6 +8,39 @@ import numpy as np
 import os
 import toughio
 import random
+from .helper import calc_conne
+
+
+def write_mesh2(path, mesh):
+    dist, areai, areao, betax_ = calc_conne(mesh)
+
+    volume = mesh["Volume"]                             # 1
+    material = mesh["Material"]                         # 2
+
+    area = np.zeros(np.size(volume))
+    for key in areao:
+        area[key] = areao[key]                          # 3
+
+    centers = mesh.cell_centers().points                # 4
+
+    ne = list(areai.keys())                             # 5
+
+    d1 = 0.5 * np.fromiter(dist.values(), dtype=float)  # 7
+    d2 = d1                                             # 8
+
+    areax = np.fromiter(areai.values(), dtype=float)    # 9
+
+    betax = np.fromiter(betax_.values(), dtype=float)   # 10
+
+    incon = mesh["initial_condition"]                   # 11
+
+    # Nur Unterschiede in h (1,2 -> 1) und v (3)
+    isot = np.ones(np.size(areax))                      # 6
+    ind = np.abs(betax_) > 0.5
+    isot[ind] = 3
+
+    write_mesh(path, volume, material, area, centers,
+               ne, isot, d1, d2, areax, betax, incon)
 
 
 def strf(zahl):
