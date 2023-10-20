@@ -9,5 +9,5 @@
 
 ## Notice
 The project leading to this application has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement "LEILAC2 - Low Emission Intensity Lime and Cement" GA 884170. 
-![Funded by EU](docs\EN-Funded_by_the_EU-POS.jpg)
+![Funded by EU](docs/EN-Funded_by_the_EU-POS.jpg)
 
