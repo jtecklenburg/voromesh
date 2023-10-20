@@ -7,8 +7,9 @@ Created on Tue Apr 18 13:32:44 2023
 
 import unittest
 
-from voronoi import Voronoi
-from numpy import array, max, min, sqrt
+from voromesh import Voronoi
+from numpy import array
+
 
 class VoronoiTests(unittest.TestCase):
 
@@ -45,9 +46,6 @@ class VoronoiTests(unittest.TestCase):
         expected_result = len(self.points2)
         self.assertEqual(result, expected_result)
 
+
 if __name__ == "__main__":
     unittest.main()
-
-
-
-# self.voronoi,

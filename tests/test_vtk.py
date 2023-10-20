@@ -8,7 +8,7 @@ Created on Tue Apr 25 16:00:01 2023
 import unittest
 import vtk
 
-from voronoi.io import create_unstructured_mesh
+from voromesh.voronoi.io import create_unstructured_mesh
 
 
 class TestCreateUnstructuredMesh(unittest.TestCase):
@@ -38,3 +38,7 @@ class TestCreateUnstructuredMesh(unittest.TestCase):
         for j in range(n_points):
             point_id = cell.GetPointId(j)
             self.assertEqual(point_id, expected_connectivity[j])
+
+
+if __name__ == "__main__":
+    unittest.main()

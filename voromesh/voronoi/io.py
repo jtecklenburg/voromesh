@@ -24,6 +24,7 @@ def create_unstructured_mesh(points, connectivities):
     vtk_cells = vtk.vtkCellArray()
     for connectivity in connectivities:
         n_points = len(connectivity)
+        print(n_points)
         vtk_cell = vtk.vtkPolygon()
         vtk_cell.GetPointIds().SetNumberOfIds(n_points)
         for j, point_index in enumerate(connectivity):
@@ -35,12 +36,21 @@ def create_unstructured_mesh(points, connectivities):
     return mesh
 
 
-def add_dimension(points):
+def add_dimension(points, dim="z"):
+
     z = np.zeros((np.shape(points)[0], 1))
-    return np.hstack((points, z))
+
+    if dim.upper() == "Z" or dim.upper() == "XY":
+        return np.hstack((points, z))
+    elif dim.upper() == "X" or dim.upper() == "YZ":
+        return np.hstack((z, points))
+    elif dim.upper() == "Y" or dim.upper() == "XZ":
+        return np.hstack((points[:, 0], z, points[:, 1]))
+    else:
+        raise ValueError("Parameter dim = " + str(dim) + " not implemented.")
 
 
-def to_vtk(voronoi, decimalplace=8):
+def to_vtk(voronoi, decimalplace=8, dim="z"):
 
     # Find unique edges of geometries
 
@@ -58,7 +68,7 @@ def to_vtk(voronoi, decimalplace=8):
     coords_unique, ind = np.unique(c_round, return_inverse=True, axis=0)
 
     # Convert to VTK unstructured mesh
-    points = add_dimension(coords_unique)
+    points = add_dimension(coords_unique, dim)
 
     connectivities = list()
     i = 0
@@ -72,6 +82,6 @@ def to_vtk(voronoi, decimalplace=8):
     return create_unstructured_mesh(points, connectivities)
 
 
-def to_pyvista(voronoi, decimalplace=8):
-    vtkmesh = to_vtk(voronoi, decimalplace)
+def to_pyvista(voronoi, decimalplace=8, dim="z"):
+    vtkmesh = to_vtk(voronoi, decimalplace, dim)
     return UnstructuredGrid(vtkmesh)

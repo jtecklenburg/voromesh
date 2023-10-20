@@ -69,7 +69,7 @@ class Voronoi:
         plt.axis('equal')
         plt.show()
 
-    def to_vtk(self, decimalplace=8):
+    def to_vtk(self, decimalplace=8, dim="Z"):
         """
         Converts the Voronoi diagram to a vtk unstructured mesh.
 
@@ -78,9 +78,9 @@ class Voronoi:
         None.
 
         """
-        return to_vtk(self.voronoi, decimalplace)
+        return to_vtk(self.voronoi, decimalplace, dim)
 
-    def to_pyvista(self, decimalplace=8):
+    def to_pyvista(self, decimalplace=8, dim="Z"):
         """
         Converts the Voronoi diagram to a pyvista unstructured mesh.
 
@@ -89,7 +89,7 @@ class Voronoi:
         None.
 
         """
-        return to_pyvista(self.voronoi, decimalplace)
+        return to_pyvista(self.voronoi, decimalplace, dim)
 
 # def test():
 

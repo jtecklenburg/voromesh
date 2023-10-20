@@ -19,5 +19,6 @@ markdown_extensions:
 
 nav:
     - "Start": index.md
-    - "Examples": helloworld.ipynb
+    - "Voronoi mesh": helloworld.ipynb
+    - "Structured mesh": structured.ipynb
     - "API": api.md

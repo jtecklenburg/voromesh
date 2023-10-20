@@ -11,11 +11,32 @@ import random
 from .helper import calc_conne
 
 
-def write_mesh2(path, mesh):
+def write_mesh(path, mesh, materials):
+    """
+    Writes a mesh in TOUGH2/TOUGH3 format.
+
+    Parameters
+    ----------
+    path : string
+        Path for writing the TOUGH3 mesh.
+    mesh : pyvista.UnstructuredGrid with cell data (see below)
+        mesh["Volume"] :  cell volumes
+        mesh["material"] : cell material as integer
+        mesh["initial_condition"] : cell initial conditions as list
+                                    find more information in TOUGH EOS manuals
+    materials : dict
+        Relate numbers in mesh["material"] to material names from the TOUGH
+        INFILE. Example: materials = {1: "WELL", 2: "SAND"}
+
+    Returns
+    -------
+    None.
+
+    """
     dist, areai, areao, betax_ = calc_conne(mesh)
 
     volume = mesh["Volume"]                             # 1
-    material = mesh["Material"]                         # 2
+    material = [materials[i] for i in mesh["material"]]  # 2
 
     area = np.zeros(np.size(volume))
     for key in areao:
@@ -36,11 +57,45 @@ def write_mesh2(path, mesh):
 
     # Nur Unterschiede in h (1,2 -> 1) und v (3)
     isot = np.ones(np.size(areax))                      # 6
-    ind = np.abs(betax_) > 0.5
+    ind = np.abs(betax) > 0.5
     isot[ind] = 3
 
-    write_mesh(path, volume, material, area, centers,
-               ne, isot, d1, d2, areax, betax, incon)
+    _write_mesh(path, volume, material, area, centers,
+                ne, isot, d1, d2, areax, betax, incon)
+
+
+def update_gener(path2infile, mesh, materials, wells):
+    """
+    Update the well information in the TOUGH3 INFILE
+
+    Parameters
+    ----------
+    path2infile : string
+        path to TOUGH3 INFILE.
+    mesh : pyvista.UnstructuredGrid with cell data
+        see write_mesh function.
+    materials : dict
+        see write_mesh function.
+    wells : dict
+        Define inflow and outflows.
+        Key of dict is the material. The flow is splitted according to the
+        volume fraction, when more than one cell has the same material.
+        Value of dict is a dict with flow components. See TOUGH3 manual and
+        TOUGH3 EOS manuals for details.
+        Example: wells = {"WELL": {"COM1": 28.53, "COM3": 1e-6}}
+
+
+    Returns
+    -------
+    None.
+
+    """
+
+    material = [materials[i] for i in mesh["material"]]
+    volume = mesh["Volume"]
+
+    _update_gener(material, volume, wells, path2infile,
+                  names=False, verbose=False)
 
 
 def strf(zahl):
@@ -48,19 +103,6 @@ def strf(zahl):
         return np.format_float_scientific(zahl, 4).rjust(10)
     else:
         return np.format_float_scientific(zahl, 3).rjust(10)
-
-
-
-    # if abs(zahl) > 999999 or (abs(zahl) < 0.0001 and abs(zahl) > 0):
-    #     if zahl > 0:
-    #         return np.format_float_scientific(zahl, 4).rjust(10)
-    #     else:
-    #         return np.format_float_scientific(zahl, 3).rjust(10)
-    # else:
-    #     if zahl > 0:
-    #         return np.format_float_positional(zahl, 8).rjust(10)
-    #     else:
-    #         return np.format_float_positional(zahl, 7).rjust(10)
 
 
 def caption(name):
@@ -94,8 +136,6 @@ def elementnames(nel):
 
 
 def _write_elements(file, names, volume, material, area, center, pmxmax=10):
-
-    #default_material = "SAND"
 
     file.write(caption("ELEME")+'\n')
 
@@ -172,7 +212,8 @@ def write_incon(path, names, incons):
     f.close()
 
 
-def write_gener(material, volume, wells, path2infile, names=False, verbose=False):
+def _update_gener(material, volume, wells, path2infile,
+                  names=False, verbose=False):
 
     if type(names) == bool:
         names = np.array(elementnames(len(volume)))
@@ -223,16 +264,18 @@ def activate_pmx(path2infile):
     parameters["rocks"]["SEED"] = {}
     toughio.write_input(os.path.join(path2infile), parameters)
 
-def write_foft(center, names=False):
-    mesh = toughio.read_mesh(os.path.join(path, "mesh.pickle"))
 
-    #Elemente für Zeitreihe plotten
-    label1 = mesh.labels[mesh.near((10.0, 0.0, 0.0))]
-    label2 = mesh.labels[mesh.near((100.0, 0.0, 0.0))]
-    parameters['element_history'] = [label1, label2]
+# def write_foft(path, center, names=False):
+#     mesh = toughio.read_mesh(os.path.join(path, "mesh.pickle"))
+
+#     #Elemente für Zeitreihe plotten
+#     label1 = mesh.labels[mesh.near((10.0, 0.0, 0.0))]
+#     label2 = mesh.labels[mesh.near((100.0, 0.0, 0.0))]
+#     parameters['element_history'] = [label1, label2]
 
 
-def write_mesh(path, volume, material, area, center, ne, isot, d1, d2, areax, betax, incon=False):
+def _write_mesh(path, volume, material, area, center, ne,
+                isot, d1, d2, areax, betax, incon=False):
     """
     Writes TOUGH3 MESH file
 
@@ -276,89 +319,3 @@ def write_mesh(path, volume, material, area, center, ne, isot, d1, d2, areax, be
         write_incon(path, names, incon)
 
     f.close()
-
-
-def test():
-    filename = r"C:\Test\meshgen"
-    volume = [np.pi*1e10, 2., 3.]
-    area = [np.pi*1e-10, 2., 1.]
-    x = [np.pi*10000, 2., 3.]
-    y = [np.pi*100, 2., 3.]
-    z = [np.pi, 10000, 1.]
-
-    material = ["SAND ", "WELL ", "WELL "]
-    center = np.column_stack((x, y, z))
-
-    ne = [(0, 1), (1, 2)]
-    isot = [1, 2]
-    d1 = [np.pi*1e-10, np.pi]
-    d2 = [0.5, 0.5]
-    areax = [1, 2]
-    betax = [1, 1]
-
-    write_mesh(filename, volume, material, area, center,
-               ne, isot, d1, d2, areax, betax)
-
-    wells = {"WELL ": {"COM1": 28.53,
-                       "COM3": 1e-6}}
-
-    write_gener(material, volume, wells,
-                os.path.join(filename, "INFILE"), verbose=True)
-
-
-def test1():
-    filename = r"C:\Test\meshgen"
-    height = 45
-    width = 10
-    nele = 100
-
-    # ELEME
-    x = np.hstack((0, np.geomspace(0.1, 5000, nele-1)))
-    y = np.ones(nele)
-    z = -2500*np.ones(nele)
-
-    center = np.column_stack((x, y, z))
-
-    xi = (x[:-1] + x[1:])/2
-    volume = np.hstack((xi[0], np.diff(xi), xi[-1])) * height * width
-
-    material = list()
-    for _ in range(nele):
-        material.append("SAND ")
-
-    area = 2 * np.ones(nele) * width  # Oben und unten
-
-    # CONNE
-    ne = np.column_stack((np.arange(0, nele-1, 1, dtype=int),
-                          np.arange(1, nele, 1, dtype=int)))
-    isot = np.ones(nele-1)
-    d1 = xi - x[:-1]
-    d2 = x[1:] - xi
-    areax = np.ones(nele-1) * width * height
-
-    betax = np.ones(nele-1)
-
-    col = np.pi*np.ones(nele)
-    incon = np.column_stack((col, 10*col, 1000*col, 10000*col))
-
-    write_mesh(filename, volume, material, area, center,
-               ne, isot, d1, d2, areax, betax, incon=incon)
-
-# 2000      ->     2000.0  -> Zahl ohne Nachkommastellen
-# pi        -> 3.14159265  -> Zahl mit vielen relevanten Nachkommastellen
-# pi*1e10   -> 3.14159e10  -> Wissenschaftliche Notation notwendig
-# pi*1e-10  -> 3.1415e-10
-
-
-# import math
-
-# def decimals(v):
-#     return max(0, min(6,6-int(math.log10(abs(v))))) if v else 6
-
-# v = 0.00215165
-# "{0:.{1}f}".format(v, decimals(v))
-
-# v = np.pi*1e10
-# "{0:.{1}f}".format(v, decimals(v))
-
-test()

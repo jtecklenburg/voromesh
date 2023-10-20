@@ -5,32 +5,22 @@ Created on Wed May 31 17:14:39 2023
 @author: jante
 """
 
-import pickle
+
 import numpy as np
-from os.path import join
 import pyvista as pv
 import vtk
-
-from voronoi import Voronoi
-from io_tough import write_mesh2, update_gener2
-
-testcase = 1
-plotvoro = False
-plotmesh = False
-fromfile = True
-
-# plotvoro = True
-# plotmesh = True
-# fromfile = False
 
 
 def update_z_from_surf(mesh, surf):
 
-    z = surf.points[:, 2]
+    z = surf.points[:, 2].copy()
     surf["z"] = z
     surf.points[:, 2] = 0
+
     mesh = mesh.sample(surf)
     mesh.points[:, 2] = mesh["z"]
+
+    surf.points[:, 2] = z
     return mesh
 
 
@@ -129,6 +119,7 @@ def neighbors(mesh, cell_idx):
     neigh.discard(cell_idx)
     return np.array(list(neigh))
 
+
 def find_cell_interfaces(points):
     """
     maps points to cell interfaces
@@ -167,95 +158,3 @@ def find_cell_interfaces(points):
     interf.append(points[idx])
 
     return interf
-
-
-path = r"C:\Python\packages\voromesh\testdata"
-
-if testcase == 0:    # Kreisförmiges Voronoi-Mesh
-    points = pickle.load(open(join(path, "mesh_points.pickle"), "rb"))
-    path = join(path, "voro_rand3")
-    radius = 400
-    thickness = np.array([4.5] * 10)
-elif testcase == 1:   # Uniform mesh -> sgrid2
-    points = pickle.load(open(join(path, "uniform_points.pickle"), "rb"))
-    path = join(path, "sgrid_voro")
-    radius = 50.5
-    thickness = np.array([4.5] * 10)
-else:
-    points = pickle.load(open(join(path, "points.p"), "rb"))
-    points = np.delete(points, 2, 1)
-    path = join(path, "points")
-    radius = 0.1
-    thickness = [0.10, 0.20, 0.30]
-
-
-voro = Voronoi(points, buffer_size=radius)
-
-if plotvoro:
-    voro.plot()
-
-surfmesh = voro.to_pyvista()
-
-# 2. Mapping
-
-vtk1 = r"C:\Test\features\Local Server\TUNB\11_Basis_Mittlerer_Buntsandstein\11_ZNS_sm.vtk"
-surf = pv.read(vtk1)
-
-surfmesh = update_z_from_surf(surfmesh, surf)
-
-surfmesh = surfmesh.compute_cell_sizes(length=False, area=True, volume=False)
-#area = surfmesh["Area"]
-
-if plotmesh:
-    print(surfmesh.array_names)
-    surfmesh.plot(show_edges=True, scalars="z")
-
-
-area = surfmesh["Area"]
-
-mesh = layersfromsurf(surfmesh, thickness)
-
-mesh["z"] = mesh.points[:, 2]
-
-if plotmesh:
-    mesh.plot(show_edges=True)
-
-
-# %% Materialien
-
-mesh.cell_data["material"] = 1
-
-# well
-xwell = 391677.41
-ywell = 6073156.27
-ind = mesh.find_cells_along_line([xwell, ywell, -3000], [xwell, ywell, 0])
-mesh.cell_data["material"][ind] = 2
-
-materials = {1: "SAND",
-             2: "WELL"}
-
-# %% Anfangsbedingungen
-SSalt = 0.15
-SCO2 = 0.0
-p0 = 29430000
-T0 = 83
-
-centers = mesh.cell_centers().points
-incon = np.full((mesh.n_cells, 4), -1.0e9)
-incon[:, 0] = p0 - 9810.0 * centers[:, 2]
-incon[:, 1] = SSalt
-incon[:, 2] = SCO2
-incon[:, 3] = T0
-
-mesh.cell_data["initial_condition"] = incon
-
-# mesh2.write_tough(os.path.join(path, "MESH"), incon=True)
-# mesh2.write(os.path.join(path, "mesh.pickle"))
-
-wells = {"WELL": {"COM3": 28.53,
-                  "COM1": 1e-6}}
-
-mesh.save(join(path, "mesh.vtu"))
-
-write_mesh2(join(path), mesh, materials)
-update_gener2(join(path, "INFILE"), mesh, materials, wells)

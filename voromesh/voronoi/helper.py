@@ -15,6 +15,11 @@ def convex_hull(points, buffer_size):
     return MultiPoint([Point(i)
                        for i in points]).convex_hull.buffer(buffer_size)
 
+    ### points = MultiPoint([(0.0, 0.0), (1.0, 1.0)])
+    ### shapely.ops.triangulate(geom, tolerance=0.0, edges=False)
+    ### shapely.ops.voronoi_diagram(geom, envelope=None, tolerance=0.0, edges=False)
+    ### shapely.ops.unary_union(geoms)
+    ### object.buffer(distance
 
 def voronoi_bound(points, boundary):
 
