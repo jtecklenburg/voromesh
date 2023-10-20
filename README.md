@@ -1,7 +1,7 @@
 # voromesh
 
 ## Features
-- Creates meshes from a bounded Voronoi diagram of a 2D point clouds 
+- Creates meshes from a bounded Voronoi diagram of a 2D point cloud 
 - Extrude meshes to 3D
 - Export as VTU or TOUGH3-MESH
 
