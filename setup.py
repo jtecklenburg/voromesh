@@ -4,7 +4,7 @@ DISTNAME = "voromesh"
 
 VERSION = "0.1.0"
 
-INSTALL_REQUIRES = ["numpy", "shapely", "scipy", "pyvista", "vtk"]
+INSTALL_REQUIRES = ["numpy", "shapely", "scipy", "pyvista", "vtk", "toughio"]
 
 PACKAGES = ["voromesh", "tests"]
 
