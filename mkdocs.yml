@@ -1,5 +1,5 @@
 site_name: Voromesh
-site_description: "Meshing with Voronoi decomposition."
+site_description: "Bounded Voronoi diagrams."
 
 theme:
     name: "material"
@@ -19,6 +19,6 @@ markdown_extensions:
 
 nav:
     - "Start": index.md
-    - "Voronoi mesh": helloworld.ipynb
-    - "Structured mesh": structured.ipynb
+    - "Bounded Voronoi diagram": helloworld.ipynb
+    - "Extrusion of a surface mesh": structured.ipynb
     - "API": api.md
