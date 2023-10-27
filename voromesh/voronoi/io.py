@@ -24,7 +24,7 @@ def create_unstructured_mesh(points, connectivities):
     vtk_cells = vtk.vtkCellArray()
     for connectivity in connectivities:
         n_points = len(connectivity)
-        print(n_points)
+        # print(n_points)
         vtk_cell = vtk.vtkPolygon()
         vtk_cell.GetPointIds().SetNumberOfIds(n_points)
         for j, point_index in enumerate(connectivity):
@@ -57,7 +57,7 @@ def to_vtk(voronoi, decimalplace=8, dim="z"):
     coord_list = list()
     n_cells = list()
 
-    for geo in voronoi:
+    for geo in voronoi.geoms:
         mapped_geo = mapping(geo)
         coord = mapped_geo['coordinates'][0]
         coord_list = coord_list + list(coord)
