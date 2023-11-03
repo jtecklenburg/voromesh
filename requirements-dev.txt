@@ -7,6 +7,5 @@ mkdocstrings-python
 mkdocs-jupyter
 mkdocs-material
 Pygments
-numpy
-PyDistMesh
+
 
