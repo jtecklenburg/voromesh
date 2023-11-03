@@ -21,4 +21,5 @@ nav:
     - "Start": index.md
     - "Bounded Voronoi diagram": helloworld.ipynb
     - "Extrusion of a surface mesh": structured.ipynb
+    - "Unstructured mesh": unstructured.ipynb
     - "API": api.md
