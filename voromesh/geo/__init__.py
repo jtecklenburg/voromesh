@@ -1,17 +1,24 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 31 17:14:39 2023
-
-@author: jante
-"""
-
-
 import numpy as np
 import pyvista as pv
 import vtk
 
-
 def update_z_from_surf(mesh, surf):
+    """
+    Maps elevation data from surf to mesh.
+
+    Parameters
+    ----------
+    mesh : pyvista.UnstructuredGrid
+        (Surface) Mesh without elevation data.
+    surf : pyvista.UnstructuredGrid
+        Surface mesh with elevation data.
+
+    Returns
+    -------
+    mesh : pyvista.UnstructuredGrid
+        (Surface) Mesh with elevation data from surf
+
+    """
 
     z = surf.points[:, 2].copy()
     surf["z"] = z
@@ -94,67 +101,3 @@ def layersfromsurf(surfmesh, thickness):
     mesh["Layer"] = layer
 
     return mesh
-
-
-def neighbors(mesh, cell_idx):
-    """
-    Find all neighbors of cell cell_idx with common nodes
-
-    Parameters
-    ----------
-    mesh : pyvista.core.pointset.UnstructuredGrid
-        mesh
-    cell_idx : int
-        number of cell in mesh
-
-    Returns
-    -------
-    np.array
-        list with idxs of cell neighbors.
-
-    """
-    cell = mesh.GetCell(cell_idx)
-    pids = pv.vtk_id_list_to_array(cell.GetPointIds())
-    neigh = set(mesh.extract_points(pids)["vtkOriginalCellIds"])
-    neigh.discard(cell_idx)
-    return np.array(list(neigh))
-
-
-def find_cell_interfaces(points):
-    """
-    maps points to cell interfaces
-
-    Parameters
-    ----------
-    points : list of int
-        points of cell. Tested for prism-type celltypes only!
-
-    Returns
-    -------
-    interf : list of list of int
-        nodes for each interface.
-
-    """
-
-    points = np.array(points)
-    n = int(np.size(points)/2)
-
-    # the order of points is important for calculating the area.
-    #  3------2
-    #  |      |
-    #  |      |   -> 0, 1, 2, 3
-    #  0------1
-    # clockwise or counterclockwise direction
-
-    interf = list()
-    interf.append(points[:n])
-    interf.append(points[n:])
-
-    for i in np.arange(n-1):
-        idx = [i, (i+1) % n, (i+n+1) % (2*n), (i+n) % (2*n)]
-        interf.append(points[idx])
-
-    idx = [0, n-1, 2*n-1, n]
-    interf.append(points[idx])
-
-    return interf

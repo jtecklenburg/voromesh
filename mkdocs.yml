@@ -21,5 +21,10 @@ nav:
     - "Start": index.md
     - "Bounded Voronoi diagram": helloworld.ipynb
     - "Extrusion of a surface mesh": structured.ipynb
+    - "Voronoi mesh from GMSH mesh (Part 1)": mesh1.ipynb
+    - "Mapping elevation data to Voronoi mesh (Part 2)": mesh2.ipynb
     - "A mesh for TOUGH3 (Part 1)": tough1.ipynb
-    - "API": api.md
+    - "Mesh properties for TOUGH3 (Part 2)": tough2.ipynb
+    - "API for class Voronoi": api_voronoi.md
+    - "API of module geo": api_geo.md
+    - "API of module tough3": api_tough3.md
