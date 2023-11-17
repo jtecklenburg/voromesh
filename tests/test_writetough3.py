@@ -68,41 +68,34 @@ class TestCreateUnstructuredMesh(unittest.TestCase):
 
     def test_write_mesh(self):
 
-        try:
+        path = os.path.dirname(os.path.realpath(__file__))
+        write_mesh(path, self.mesh, self.materials)
 
-            path = os.path.dirname(os.path.realpath(__file__))
-            write_mesh(path, self.mesh, self.materials)
+        # check MESH
+        path_expected = os.path.join(path, "ref", "MESH")
+        path_actual = os.path.join(path, "MESH")
 
-            # check MESH
-            path_expected = os.path.join(path, "ref", "MESH")
-            path_actual = os.path.join(path, "MESH")
+        with open(path_expected, "r") as f:
+            expected_lines = f.readlines()
 
-            with open(path_expected, "r") as f:
-                expected_lines = f.readlines()
+        with open(path_actual, "r") as f:
+            actual_lines = f.readlines()
 
-            with open(path_actual, "r") as f:
-                actual_lines = f.readlines()
+        diff = list(unified_diff(expected_lines, actual_lines))
+        assert diff == [], "Unexpected file contents in MESH:\n" + "".join(diff)
 
-            diff = list(unified_diff(expected_lines, actual_lines))
-            assert diff == [], "Unexpected file contents in MESH:\n" + "".join(diff)
+        # check INCON
+        path_expected = os.path.join(path, "ref", "INCON")
+        path_actual = os.path.join(path, "INCON")
 
-            # check INCON
-            path_expected = os.path.join(path, "ref", "INCON")
-            path_actual = os.path.join(path, "INCON")
+        with open(path_expected, "r") as f:
+            expected_lines = f.readlines()
 
-            with open(path_expected, "r") as f:
-                expected_lines = f.readlines()
+        with open(path_actual, "r") as f:
+            actual_lines = f.readlines()
 
-            with open(path_actual, "r") as f:
-                actual_lines = f.readlines()
-
-            diff = list(unified_diff(expected_lines, actual_lines))
-            assert diff == [], "Unexpected file contents in INCON:\n" + "".join(diff)
-
-        except:
-            print(os.listdir(path))
-            print(os.listdir(os.path.join(path, "ref")))
-            raise
+        diff = list(unified_diff(expected_lines, actual_lines))
+        assert diff == [], "Unexpected file contents in INCON:\n" + "".join(diff)
 
 if __name__ == "__main__":
     unittest.main()
