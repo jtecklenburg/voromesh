@@ -46,7 +46,7 @@ def elementnames(nel):
     return [toughname(a) for a in range(nel)]
 
 
-def _write_elements(file, names, volume, material, area, center, pmxmax=10):
+def _write_elements(file, names, volume, material, area, center):
 
     file.write(caption("ELEME")+'\n')
 
@@ -56,7 +56,7 @@ def _write_elements(file, names, volume, material, area, center, pmxmax=10):
                    material[i].ljust(5) +           # MA1, MA2 -> Material
                    strf(volume[i]) +                # VOLX
                    strf(area[i]) +                  # AHTX
-                   strf(random.uniform(1, 10)) +    # PMX
+                   strf(0) +                        # PMX
                    strf(center[i, 0]) +             # X
                    strf(center[i, 1]) +             # Y
                    strf(center[i, 2]) + '\n')       # Z
