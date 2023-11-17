@@ -4,7 +4,7 @@ site_description: "Bounded Voronoi diagrams."
 theme:
     name: "material"
     palette:
-        primary: "blue"
+        primary: "cyan"
         accent: "grey"
 
 plugins:

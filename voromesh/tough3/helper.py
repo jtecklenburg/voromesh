@@ -2,27 +2,24 @@
 
 import numpy as np
 import pyvista as pv
+from numba import jit
 
 
-# Print iterations progress
-def printProgressBar(iteration, total, prefix='', suffix='',
-                     decimals=1, length=80, fill='█', printEnd="\r"):
+def printProgress(iteration, total):
     """
-    Call in a loop to create terminal progress bar
-    @params:
-        iteration   - Required  : current iteration (Int)
-        total       - Required  : total iterations (Int)
-        prefix      - Optional  : prefix string (Str)
-        suffix      - Optional  : suffix string (Str)
-        decimals    - Optional  : positive number of decimals in percent complete (Int)
-        length      - Optional  : character length of bar (Int)
-        fill        - Optional  : bar fill character (Str)
-        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    Call in a loop to show progress on terminal
+
+    Parameters
+    ----------
+    iteration : Int
+       Current iteration
+    total : Int
+        Total iterations
     """
-    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
-    filledLength = int(length * iteration // total)
-    bar = fill * filledLength + '-' * (length - filledLength)
-    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
+
+    if iteration % int(total/100) == 0:
+        print('\r'+str(int(iteration / int(total/100)))+"%", end="\r")
+
     # Print New Line on Complete
     if iteration == total:
         print()
@@ -92,15 +89,7 @@ def calc_conne(mesh):
                     conne.sort()
                     key = tuple(conne)
 
-                    # calc interface area
-                    a = np.zeros(3)
-                    for i in np.arange(npoints):
-                        # https://en.wikipedia.org/wiki/Shoelace_formula#Generalization
-
-                        a = a + np.cross(coords[interf[i], :],
-                                         coords[interf[(i+1) % npoints], :])
-
-                    inner_interfaces[key] = np.linalg.norm(a)/2
+                    inner_interfaces[key] = calc_interface_area(coords[interf, :], npoints)
 
                     # calc distance between centers
                     center1 = centers[cell_id]
@@ -118,21 +107,27 @@ def calc_conne(mesh):
         area = 0
         for interf in cell_interfaces:
 
-            a = np.zeros(3)
             npoints = np.size(interf)
 
-            for i in np.arange(npoints):
-
-                a = a + np.cross(coords[interf[i], :],
-                                 coords[interf[(i+1) % npoints], :])
-
-            area += np.linalg.norm(a)/2
+            area += calc_interface_area(coords[interf, :], npoints)
 
         outer_interfaces[cell_id] = area
 
-        printProgressBar(cell_id, mesh.number_of_cells)
+        printProgress(cell_id, mesh.number_of_cells)
 
     return distances, inner_interfaces, outer_interfaces, betax
+
+
+@jit
+def calc_interface_area(nodelist, npoints):
+    # https://en.wikipedia.org/wiki/Shoelace_formula#Generalization
+    a = np.zeros(3)
+
+    for i in np.arange(npoints):
+        a += np.cross(nodelist[i, :],
+                      nodelist[(i+1) % npoints, :])
+
+    return np.linalg.norm(a)/2
 
 
 def find_cell_interfaces(points):
