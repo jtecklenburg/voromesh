@@ -63,12 +63,14 @@ def calc_conne(mesh):
 
     for cell_id in np.arange(mesh.number_of_cells, dtype=int):
 
-        p1 = mesh.cell_point_ids(cell_id)
+        # p1 = mesh.cell_point_ids(cell_id)
+        p1 = mesh.get_cell(cell_id).point_ids
         cell_interfaces = find_cell_interfaces(p1)
         neigh = neighbors(mesh, cell_id)
 
         for n in neigh:
-            p2 = mesh.cell_point_ids(n)
+            # p2 = mesh.cell_point_ids(n)
+            p2 = mesh.get_cell(n).point_ids
 
             # common points of both cells define the interface
             seen = set()
