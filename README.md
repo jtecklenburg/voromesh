@@ -10,7 +10,7 @@
 
 ## Dokumentation
 
-Voromesh was designed for setting up conceptual simulations models for carbon dioxide storage.  The documention including workflows can be found here.
+Voromesh was designed for setting up conceptual simulations models for carbon dioxide storage.  The documention including workflows can be found [here](https://jtecklenburg.github.io/voromesh/).
 
 ## Quickstart
 
