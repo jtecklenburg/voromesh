@@ -93,13 +93,13 @@ def calc_conne(mesh):
                     # calc distance between centers
                     center1 = centers[cell_id]
                     center2 = centers[n]
-                    dist = np.linalg.norm(center1 - center2)
-                    distances[key] = dist
-
-                    # calc cos of connection between centers and gravity
                     v1 = center1 - center2
 
-                    # norm(g) = 1!
+                    dist = np.linalg.norm(v1)
+                    distances[key] = dist
+
+                   # calc cos of connection between centers and gravity
+                   # norm(g) = 1!
                     betax[key] = np.dot(v1, g) / (np.linalg.norm(v1))
 
         # calc area of outer interfaces
@@ -117,7 +117,7 @@ def calc_conne(mesh):
     return distances, inner_interfaces, outer_interfaces, betax
 
 
-@jit
+@jit(nopython=True)
 def calc_interface_area(nodelist, npoints):
     # https://en.wikipedia.org/wiki/Shoelace_formula#Generalization
     a = np.zeros(3)
