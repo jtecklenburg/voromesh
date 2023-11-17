@@ -5,7 +5,7 @@ import pyvista as pv
 from numba import jit
 
 
-def printProgress(iteration, total):
+def printProgress(iteration, total, totalmin=5000):
     """
     Call in a loop to show progress on terminal
 
@@ -15,14 +15,16 @@ def printProgress(iteration, total):
        Current iteration
     total : Int
         Total iterations
+    totalmin : Int
+        Minimum Iterations for showing progress
     """
+    if total > totalmin:
+        if iteration % int(total/100) == 0:
+            print('\r'+str(int(iteration / int(total/100)))+"%", end="\r")
 
-    if iteration % int(total/100) == 0:
-        print('\r'+str(int(iteration / int(total/100)))+"%", end="\r")
-
-    # Print New Line on Complete
-    if iteration == total:
-        print()
+        # Print New Line on Complete
+        if iteration == total:
+            print()
 
 
 def neighbors(mesh, cell_idx):
@@ -60,18 +62,15 @@ def calc_conne(mesh):
 
     for cell_id in np.arange(mesh.number_of_cells, dtype=int):
 
-        # p1 = mesh.cell_point_ids(cell_id)
         p1 = mesh.get_cell(cell_id).point_ids
         cell_interfaces = find_cell_interfaces(p1)
         neigh = neighbors(mesh, cell_id)
 
         for n in neigh:
-            # p2 = mesh.cell_point_ids(n)
             p2 = mesh.get_cell(n).point_ids
 
             # common points of both cells define the interface
-            seen = set()
-            interface = [x for x in (p1+p2) if x in seen or seen.add(x)]
+            interface = list(set(p1) & set(p2))
 
             # the interface is 2d, when the number of points is 3 or greater
             npoints = np.size(interface)
