@@ -2,6 +2,12 @@ import numpy as np
 from .helper import calc_conne
 from .tough3 import _write_mesh, _update_gener
 
+import toughio, os
+import pyvista as pv
+from pvdwriter import pvdwriter
+import sys
+
+
 def write_mesh(path, mesh, materials):
     """
     Writes a mesh in TOUGH2/TOUGH3 format.
@@ -87,3 +93,73 @@ def update_gener(path2infile, mesh, materials, wells):
 
     _update_gener(material, volume, wells, path2infile,
                   names=False, verbose=False)
+
+
+def outfile2vtu(path, mesh, outfile="OUTFILE", do_sort=True):
+    """
+    Reads an OUTFILE from a TOUGH3 simulation and append simulation results
+    to the vtu mesh for each timestamp in the OUTFILE. Also writes a pvd file
+    to relate files and timestamps in Paraview.
+
+    Parameters
+    ----------
+    path : string
+        path to TOUGH3 OUTFILE
+    mesh : string
+        name of vtu mesh in path
+    outfile : string
+        name of outfile. Default = "OUTFILE".
+    do_sort : boolean
+        parallel simulations may change the order of elements. For this
+        reason sorting may be a good idea. Default = True.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    try:
+        path_outfile = os.path.join(path, outfile)
+        outputs = toughio.read_output(path_outfile)
+    except OSError:
+        print("Error reading OUTFILE: " + path_outfile)
+        sys.exit()
+
+    try:
+        path_meshfile = os.path.join(path, mesh)
+        mesh = pv.read(path_meshfile)
+    except OSError:
+        print("Error reading mesh file: " + path_meshfile)
+        sys.exit
+
+    pvdfile = os.path.join(path, "outfile.pvd")
+    pvd = pvdwriter(pvdfile)
+
+    # Parallel simulations may change the order of elements.
+    if do_sort:
+        nn = outputs[-1][3]
+        ind = np.argsort(nn)
+
+    i = 0
+
+    for output in outputs:
+        for key in output[4]:
+
+            if do_sort:
+                mesh[key] = output[4][key][ind]
+            else:
+                mesh[key] = output[4][key]
+
+
+        timestamp = output[2]/(365.25*24*60*60)
+        filename = "mesh_" + str(i) + ".vtu"
+        print(filename + " | "+ str(timestamp))
+
+        pvd.append(filename, timestamp)
+
+        mesh.save(os.path.join(path, filename))
+        i = i + 1
+
+    pvd.close()
+    print("complete!")
