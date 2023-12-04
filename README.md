@@ -1,12 +1,13 @@
 # voromesh
-![GitHub License](https://img.shields.io/github/license/jtecklenburg/voromesh)[![https://doi.org/10.25928/3zfr-dp16]([http://www.google.com.au/images/nav_logo7.png](https://img.shields.io/badge/DOI-10.25928%2F3zfr-dp16))]([http://google.com.au/](https://doi.org/10.25928/3zfr-dp16))
+![GitHub License](https://img.shields.io/github/license/jtecklenburg/voromesh) [![https://doi.org/10.25928/3zfr-dp16](https://img.shields.io/badge/DOI-10.25928%2F3zfr-dp16?color=blue)](https://doi.org/10.25928/3zfr-dp16)
 
 ## Features
 
 ![Example mesh created with voromesh and GMSH (see documentation)](docs/voro.png)
 
 - Creates meshes from a bounded Voronoi diagram of a 2D point cloud
-- Extrude 2D surface meshes to 3D
+- Map elevations from another surface
+- Extrude surface meshes to 3D
 - Export as VTU or MESH for [TOUGH3](https://tough.lbl.gov/)
 
 ## Dokumentation
