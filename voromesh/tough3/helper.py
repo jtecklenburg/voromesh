@@ -27,30 +27,63 @@ def printProgress(iteration, total, totalmin=5000):
             print()
 
 
-def neighbors(mesh, cell_idx):
-    """
-    Find all neighbors of cell cell_idx with common nodes
+def get_neighbors(mesh):
 
-    Parameters
-    ----------
-    mesh : pyvista.core.pointset.UnstructuredGrid
-        mesh
-    cell_idx : int
-        number of cell in mesh
+    nodes = mesh.cell_connectivity
 
-    Returns
-    -------
-    np.array
-        list with idxs of cell neighbors.
+    ncells = mesh.n_cells
+    npoints = mesh.n_points
+    offset = mesh.offset
 
-    """
-    cell = mesh.GetCell(cell_idx)
-    pids = pv.vtk_id_list_to_array(cell.GetPointIds())
-    neigh = set(mesh.extract_points(pids)["vtkOriginalCellIds"])
-    neigh.discard(cell_idx)
-    return np.array(list(neigh))
+    # Create a dict. The key is the node id.
+    # The value is a list of all cells, that share the node.
+    cells_of_node = dict()
+
+    for i in range(npoints):
+        cells_of_node[i] = list()
+
+    for i in range(ncells):
+        for j in nodes[offset[i]:offset[i+1]]:
+            cells_of_node[j].append(i)
+
+    # Create a dict. The key is the cell id.
+    # The value is a list of the cell ids, that share nodes with the cell.
+    # When the cell id appears one times in the list, the cell shares a single
+    # node only. When the cell id appears two times, the boundary between the
+    # cells is a line and when cell id appears more than two times, the cells
+    # share a 2d interface.
+
+    neigh = dict()
+
+    for i in range(ncells):
+        neigh[i] = list()
+
+    for i in range(npoints):
+        con = cells_of_node[i]
+
+        for j in con:
+            for k in con:
+                if j != k:
+                    neigh[j].append(k)
+
+    # Create a dict. The key is the cell id.
+    # The value is a list of cell ids, where the cells share an 2d interface.
+
+    neighbors = dict()
+
+    for i in range(ncells):
+        neighbors[i] = list()
+
+        for j in set(neigh[i]):
+
+            if neigh[i].count(j) > 2:
+                neighbors[i].append(j)
+
+    return neighbors
 
 def calc_conne(mesh):
+
+    neighbors = get_neighbors(mesh)
 
     coords = mesh.points
     centers = mesh.cell_centers().points
@@ -64,7 +97,7 @@ def calc_conne(mesh):
 
         p1 = mesh.get_cell(cell_id).point_ids
         cell_interfaces = find_cell_interfaces(p1)
-        neigh = neighbors(mesh, cell_id)
+        neigh = neighbors[cell_id]
 
         for n in neigh:
             p2 = mesh.get_cell(n).point_ids
