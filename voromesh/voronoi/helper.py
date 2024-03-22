@@ -30,8 +30,8 @@ def voronoi_bound(points, boundary):
     ymin = np.min(points[:, 1])
     ymax = np.max(points[:, 1])
 
-    dx = 1000*(xmax - xmin)
-    dy = 1000*(ymax - ymin)
+    dx = 50*(xmax - xmin)
+    dy = 50*(ymax - ymin)
 
     xmin = xmin - dx
     xmax = xmax + dx
