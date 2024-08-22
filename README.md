@@ -10,7 +10,7 @@
 - Extrude surface meshes to 3D
 - Export as VTU or MESH for [TOUGH3](https://tough.lbl.gov/)
 
-## Dokumentation
+## Documentation
 
 Voromesh was designed for setting up conceptual simulations models for carbon dioxide storage.  The documention including workflows can be found [here](https://jtecklenburg.github.io/voromesh/).
 
