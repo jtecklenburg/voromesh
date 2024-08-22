@@ -3,7 +3,7 @@
 import numpy as np
 import pyvista as pv
 from numba import jit
-
+from cellcenter_fix import calculate_cell_centers
 
 def printProgress(iteration, total, totalmin=5000):
     """
@@ -86,7 +86,9 @@ def calc_conne(mesh):
     neighbors = get_neighbors(mesh)
 
     coords = mesh.points
-    centers = mesh.cell_centers().points
+    #centers = mesh.cell_centers().points
+    centers = calculate_cell_centers(mesh)
+
     inner_interfaces = dict()  # area between two connected cells
     outer_interfaces = dict()  # outer surface of cell
     distances = dict()  # distance of centers between two connected cells
