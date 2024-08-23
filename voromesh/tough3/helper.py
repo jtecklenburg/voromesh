@@ -3,7 +3,7 @@
 import numpy as np
 import pyvista as pv
 from numba import jit
-from cellcenter_fix import calculate_cell_centers
+from .cellcenter_fix import calculate_cell_centers
 
 def printProgress(iteration, total, totalmin=5000):
     """
