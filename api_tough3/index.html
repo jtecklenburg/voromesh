@@ -1,0 +1,1181 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Bounded Voronoi diagrams.">
+      
+      
+      
+      
+        <link rel="prev" href="../api_geo/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.32">
+    
+    
+      
+        <title>API of module tough3 - Voromesh</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.3cba04c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="grey">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-of-modul-tough3" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Voromesh" class="md-header__button md-logo" aria-label="Voromesh" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Voromesh
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API of module tough3
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Voromesh" class="md-nav__button md-logo" aria-label="Voromesh" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Voromesh
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helloworld/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bounded Voronoi diagram from 2D points
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../structured/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extrusion of a surface mesh
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mesh1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating a Voronoi mesh from a GMSH mesh
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mesh2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mapping elevation data to a Voronoi mesh
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tough1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2D mesh for TOUGH (Part 1)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tough2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mesh properties for TOUGH3 (Part 2)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_voronoi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API for class Voronoi
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_geo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API of module geo
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    API of module tough3
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    API of module tough3
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#voromesh.tough3" class="md-nav__link">
+    <span class="md-ellipsis">
+      tough3
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voromesh.tough3.outfile2vtu" class="md-nav__link">
+    <span class="md-ellipsis">
+      outfile2vtu
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="outfile2vtu">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.outfile2vtu--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.outfile2vtu--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voromesh.tough3.update_gener" class="md-nav__link">
+    <span class="md-ellipsis">
+      update_gener
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="update_gener">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.update_gener--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.update_gener--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voromesh.tough3.write_mesh" class="md-nav__link">
+    <span class="md-ellipsis">
+      write_mesh
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="write_mesh">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.write_mesh--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.write_mesh--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#voromesh.tough3" class="md-nav__link">
+    <span class="md-ellipsis">
+      tough3
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voromesh.tough3.outfile2vtu" class="md-nav__link">
+    <span class="md-ellipsis">
+      outfile2vtu
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="outfile2vtu">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.outfile2vtu--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.outfile2vtu--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voromesh.tough3.update_gener" class="md-nav__link">
+    <span class="md-ellipsis">
+      update_gener
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="update_gener">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.update_gener--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.update_gener--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voromesh.tough3.write_mesh" class="md-nav__link">
+    <span class="md-ellipsis">
+      write_mesh
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="write_mesh">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.write_mesh--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voromesh.tough3.write_mesh--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="api-of-modul-tough3">API of modul tough3</h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="voromesh.tough3"></a>
+    <div class="doc doc-contents first">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="voromesh.tough3.outfile2vtu" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">outfile2vtu</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">outfile</span><span class="o">=</span><span class="s1">&#39;OUTFILE&#39;</span><span class="p">,</span> <span class="n">do_sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Reads an OUTFILE from a TOUGH3 simulation and append simulation results
+to the vtu mesh for each timestamp in the OUTFILE. Also writes a pvd file
+to relate files and timestamps in Paraview.</p>
+<h4 id="voromesh.tough3.outfile2vtu--parameters">Parameters</h4>
+<p>path : string
+    path to TOUGH3 OUTFILE
+mesh : string
+    name of vtu mesh in path
+outfile : string
+    name of outfile. Default = "OUTFILE".
+do_sort : boolean
+    parallel simulations may change the order of elements. For this
+    reason sorting may be a good idea. Default = True.</p>
+<h4 id="voromesh.tough3.outfile2vtu--returns">Returns</h4>
+<p>None.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>voromesh/tough3/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">outfile2vtu</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">outfile</span><span class="o">=</span><span class="s2">&quot;OUTFILE&quot;</span><span class="p">,</span> <span class="n">do_sort</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads an OUTFILE from a TOUGH3 simulation and append simulation results</span>
+<span class="sd">    to the vtu mesh for each timestamp in the OUTFILE. Also writes a pvd file</span>
+<span class="sd">    to relate files and timestamps in Paraview.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : string</span>
+<span class="sd">        path to TOUGH3 OUTFILE</span>
+<span class="sd">    mesh : string</span>
+<span class="sd">        name of vtu mesh in path</span>
+<span class="sd">    outfile : string</span>
+<span class="sd">        name of outfile. Default = &quot;OUTFILE&quot;.</span>
+<span class="sd">    do_sort : boolean</span>
+<span class="sd">        parallel simulations may change the order of elements. For this</span>
+<span class="sd">        reason sorting may be a good idea. Default = True.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">path_outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">toughio</span><span class="o">.</span><span class="n">read_output</span><span class="p">(</span><span class="n">path_outfile</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error reading OUTFILE: &quot;</span> <span class="o">+</span> <span class="n">path_outfile</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">path_meshfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mesh</span><span class="p">)</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path_meshfile</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error reading mesh file: &quot;</span> <span class="o">+</span> <span class="n">path_meshfile</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span>
+
+    <span class="n">pvdfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;outfile.pvd&quot;</span><span class="p">)</span>
+    <span class="n">pvd</span> <span class="o">=</span> <span class="n">pvdwriter</span><span class="p">(</span><span class="n">pvdfile</span><span class="p">)</span>
+
+    <span class="c1"># Parallel simulations may change the order of elements.</span>
+    <span class="k">if</span> <span class="n">do_sort</span><span class="p">:</span>
+        <span class="n">nn</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">output</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span>
+
+            <span class="k">if</span> <span class="n">do_sort</span><span class="p">:</span>
+                <span class="n">mesh</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="n">key</span><span class="p">][</span><span class="n">ind</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mesh</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+
+
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="mf">365.25</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;mesh_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.vtu&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot; | &quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))</span>
+
+        <span class="n">pvd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">)</span>
+
+        <span class="n">mesh</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">pvd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;complete!&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="voromesh.tough3.update_gener" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">update_gener</span><span class="p">(</span><span class="n">path2infile</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">materials</span><span class="p">,</span> <span class="n">wells</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Update the well information in the TOUGH3 INFILE</p>
+<h4 id="voromesh.tough3.update_gener--parameters">Parameters</h4>
+<p>path2infile : string
+    path to TOUGH3 INFILE.
+mesh : pyvista.UnstructuredGrid with cell data
+    see write_mesh function.
+materials : dict
+    see write_mesh function.
+wells : dict
+    Define inflow and outflows.
+    Key of dict is the material. The flow is splitted according to the
+    volume fraction, when more than one cell has the same material.
+    Value of dict is a dict with flow components. See TOUGH3 manual and
+    TOUGH3 EOS manuals for details.
+    Example: wells = {"WELL": {"COM1": 28.53, "COM3": 1e-6}}</p>
+<h4 id="voromesh.tough3.update_gener--returns">Returns</h4>
+<p>None.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>voromesh/tough3/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">update_gener</span><span class="p">(</span><span class="n">path2infile</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">materials</span><span class="p">,</span> <span class="n">wells</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the well information in the TOUGH3 INFILE</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path2infile : string</span>
+<span class="sd">        path to TOUGH3 INFILE.</span>
+<span class="sd">    mesh : pyvista.UnstructuredGrid with cell data</span>
+<span class="sd">        see write_mesh function.</span>
+<span class="sd">    materials : dict</span>
+<span class="sd">        see write_mesh function.</span>
+<span class="sd">    wells : dict</span>
+<span class="sd">        Define inflow and outflows.</span>
+<span class="sd">        Key of dict is the material. The flow is splitted according to the</span>
+<span class="sd">        volume fraction, when more than one cell has the same material.</span>
+<span class="sd">        Value of dict is a dict with flow components. See TOUGH3 manual and</span>
+<span class="sd">        TOUGH3 EOS manuals for details.</span>
+<span class="sd">        Example: wells = {&quot;WELL&quot;: {&quot;COM1&quot;: 28.53, &quot;COM3&quot;: 1e-6}}</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">material</span> <span class="o">=</span> <span class="p">[</span><span class="n">materials</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mesh</span><span class="p">[</span><span class="s2">&quot;material&quot;</span><span class="p">]]</span>
+    <span class="n">volume</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">[</span><span class="s2">&quot;Volume&quot;</span><span class="p">]</span>
+
+    <span class="n">_update_gener</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="n">path2infile</span><span class="p">,</span>
+                  <span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="voromesh.tough3.write_mesh" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">write_mesh</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">materials</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Writes a mesh in TOUGH2/TOUGH3 format.</p>
+<h4 id="voromesh.tough3.write_mesh--parameters">Parameters</h4>
+<p>path : string
+    Path for writing the TOUGH3 mesh.
+mesh : pyvista.UnstructuredGrid with cell data (see below)
+    mesh["Volume"] :  cell volumes
+    mesh["material"] : cell material as integer
+    mesh["initial_condition"] : cell initial conditions as list
+                                find more information in TOUGH EOS manuals
+materials : dict
+    Relate numbers in mesh["material"] to material names from the TOUGH
+    INFILE. Example: materials = {1: "WELL", 2: "SAND"}</p>
+<h4 id="voromesh.tough3.write_mesh--returns">Returns</h4>
+<p>None.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>voromesh/tough3/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">write_mesh</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">materials</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Writes a mesh in TOUGH2/TOUGH3 format.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : string</span>
+<span class="sd">        Path for writing the TOUGH3 mesh.</span>
+<span class="sd">    mesh : pyvista.UnstructuredGrid with cell data (see below)</span>
+<span class="sd">        mesh[&quot;Volume&quot;] :  cell volumes</span>
+<span class="sd">        mesh[&quot;material&quot;] : cell material as integer</span>
+<span class="sd">        mesh[&quot;initial_condition&quot;] : cell initial conditions as list</span>
+<span class="sd">                                    find more information in TOUGH EOS manuals</span>
+<span class="sd">    materials : dict</span>
+<span class="sd">        Relate numbers in mesh[&quot;material&quot;] to material names from the TOUGH</span>
+<span class="sd">        INFILE. Example: materials = {1: &quot;WELL&quot;, 2: &quot;SAND&quot;}</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dist</span><span class="p">,</span> <span class="n">areai</span><span class="p">,</span> <span class="n">areao</span><span class="p">,</span> <span class="n">betax_</span> <span class="o">=</span> <span class="n">calc_conne</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+
+    <span class="n">volume</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">[</span><span class="s2">&quot;Volume&quot;</span><span class="p">]</span>                             <span class="c1"># 1</span>
+    <span class="n">material</span> <span class="o">=</span> <span class="p">[</span><span class="n">materials</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mesh</span><span class="p">[</span><span class="s2">&quot;material&quot;</span><span class="p">]]</span>  <span class="c1"># 2</span>
+
+    <span class="n">area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">volume</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">areao</span><span class="p">:</span>
+        <span class="n">area</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">areao</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>                          <span class="c1"># 3</span>
+
+    <span class="n">centers</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers</span><span class="p">()</span><span class="o">.</span><span class="n">points</span>                <span class="c1"># 4</span>
+
+    <span class="n">ne</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">areai</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>                             <span class="c1"># 5</span>
+
+    <span class="n">d1</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># 7</span>
+    <span class="n">d2</span> <span class="o">=</span> <span class="n">d1</span>                                             <span class="c1"># 8</span>
+
+    <span class="n">areax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">areai</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>    <span class="c1"># 9</span>
+
+    <span class="n">betax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">betax_</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>   <span class="c1"># 10</span>
+
+    <span class="n">incon</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">[</span><span class="s2">&quot;initial_condition&quot;</span><span class="p">]</span>                   <span class="c1"># 11</span>
+
+    <span class="c1"># Nur Unterschiede in h (1,2 -&gt; 1) und v (3)</span>
+    <span class="n">isot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">areax</span><span class="p">))</span>                      <span class="c1"># 6</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">betax</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
+    <span class="n">isot</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="n">_write_mesh</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">material</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">centers</span><span class="p">,</span>
+                <span class="n">ne</span><span class="p">,</span> <span class="n">isot</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">areax</span><span class="p">,</span> <span class="n">betax</span><span class="p">,</span> <span class="n">incon</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.471ce7a9.min.js"></script>
+      
+    
+  </body>
+</html>
